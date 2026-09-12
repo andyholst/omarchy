@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# omarchy:summary=Detect whether the computer is an MSI laptop.
+
+# Read DMI IDs via OMARCHY_DMI_ID_PATH for test stubs, falling back to /sys.
+dmi_path="${OMARCHY_DMI_ID_PATH:-/sys/class/dmi/id}"
+
+# MSI laptops report "Micro-Star International Co., Ltd." as sys_vendor. Some
+# MSI desktop boards also report this, so filter by product family/name containing
+# known laptop prefixes.
+sys_vendor=$(cat "$dmi_path/sys_vendor" 2>/dev/null)
+[[ $sys_vendor == "Micro-Star International Co., Ltd." ]] || exit 1
+
+product_family=$(cat "$dmi_path/product_family" 2>/dev/null)
+product_name=$(cat "$dmi_path/product_name" 2>/dev/null)
+
+for family in "Titan" "Stealth" "Raider" "Vector" "Crosshair" "Summit" "Creator" "Modern"; do
+  if [[ $product_family == *"$family"* || $product_name == *"$family"* ]]; then
+    exit 0
+  fi
+done
+
+exit 1
