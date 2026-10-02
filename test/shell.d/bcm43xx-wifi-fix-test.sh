@@ -59,22 +59,9 @@ grep -qx $'omarchy-pkg-add\tbroadcom-wl-dkms' "$calls" || \
   fail "BCM43224 triggers broadcom-wl-dkms installation, relying on the base install's kernel headers"
 pass "BCM43224 triggers broadcom-wl-dkms installation, relying on the base install's kernel headers"
 
-# Verify blacklist was written
-blacklist_conf="$test_tmp/etc/modprobe.d/broadcom-wl.conf"
-[[ -f $blacklist_conf ]] || fail "broadcom-wl blacklist config created"
-pass "broadcom-wl blacklist config created"
-
-grep -Fq 'blacklist b43' "$blacklist_conf" || \
-  fail "blacklist contains b43"
-pass "blacklist contains b43"
-
-grep -Fq 'blacklist brcmsmac' "$blacklist_conf" || \
-  fail "blacklist contains brcmsmac"
-pass "blacklist contains brcmsmac"
-
-grep -Fq 'blacklist bcma' "$blacklist_conf" || \
-  fail "blacklist contains bcma"
-pass "blacklist contains bcma"
+# broadcom-wl-dkms ships its own blacklist, which goes away with the package
+[[ ! -d "$test_tmp/etc/modprobe.d" ]] || fail "BCM43224 leaves blacklisting to broadcom-wl-dkms"
+pass "BCM43224 leaves blacklisting to broadcom-wl-dkms"
 
 # === Test 2: Non-Broadcom hardware is skipped ===
 
