@@ -7,7 +7,7 @@ pci_info=$(lspci -nn)
 
 if (echo "$pci_info" | grep -q "14e4:43a0" || echo "$pci_info" | grep -q "14e4:4331" || echo "$pci_info" | grep -q "14e4:4353"); then
   echo "BCM4360 / BCM4331 / BCM43224 detected"
-  omarchy-pkg-add broadcom-wl-dkms linux-headers
+  omarchy-pkg-add broadcom-wl-dkms
 
   # Blacklist open-source drivers that conflict with wl. When b43/brcmsmac/bcma
   # load first, they claim the device and prevent wl from attaching, leaving the

@@ -55,9 +55,9 @@ PATH="$stub_bin:$PATH" \
   bash -euo pipefail "$script" >/dev/null
 
 # Verify package install was called (tab-separated)
-grep -q 'broadcom-wl-dkms linux-headers' "$calls" || \
-  fail "BCM43224 triggers broadcom-wl-dkms installation"
-pass "BCM43224 triggers broadcom-wl-dkms installation"
+grep -qx $'omarchy-pkg-add\tbroadcom-wl-dkms' "$calls" || \
+  fail "BCM43224 triggers broadcom-wl-dkms installation, relying on the base install's kernel headers"
+pass "BCM43224 triggers broadcom-wl-dkms installation, relying on the base install's kernel headers"
 
 # Verify blacklist was written
 blacklist_conf="$test_tmp/etc/modprobe.d/broadcom-wl.conf"
